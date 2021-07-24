@@ -16,5 +16,6 @@ output_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/DataSets/Preproc
 output_pickle_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/Code/pickle/"
 
 Doge = pd.read_csv(price_path + 'Doge_historical_data.csv')
+Doge["Date"]=pd.to_datetime(Doge['Date'])
 
-write_pickle(output_pickle_path, "doge.pkl", Doge)
+write_pickle(output_pickle_path, "Doge.pkl", Doge)

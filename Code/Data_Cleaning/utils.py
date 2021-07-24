@@ -6,6 +6,13 @@ Created on Tue Jul 20 13:38:06 2021
 @author: jasonti
 """
 
+def merge_and_csv(var1, var2, temp, path, name, out_path):
+    import pandas as pd
+    m = pd.merge(left=var1, right=var2, on=temp)
+    write_pickle(path, name+"pkl", m)
+    m.to_csv(out_path+"/"+name+".csv")
+    return m
+    
 #Vector count & td-idf
 def create_tf_idf(df_in, min_n, max_n):
     from sklearn.feature_extraction.text import TfidfVectorizer
@@ -64,11 +71,11 @@ def find_row(rowname, head):
     return False
 
 #clean the specific row in a file
-def seek_and_clean(path_in,filename, rowname):
+def seek_and_clean(path_in,filename, rowname, columnname):
     import pandas as pd
     df = pd.read_csv(path_in + filename)
     if find_row(rowname, df.head()):
-        df['new_'+rowname] = df[rowname].apply(clean_text)
+        df[columnname] = df[rowname].apply(clean_text)
     return df
         
 

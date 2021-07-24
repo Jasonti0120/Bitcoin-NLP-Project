@@ -17,25 +17,51 @@ output_pickle_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/Code/pick
 
 EM_tweet = open_pickle(output_pickle_path, "EM_tweet.pkl")
 Doge = open_pickle(output_pickle_path, "doge.pkl")
+BitPrice = open_pickle(output_pickle_path, "Bprice.pkl")
+BitTweets = open_pickle(output_pickle_path, "BTweets.pkl")
+BitTweets.rename(columns={'date':'Date'},
+inplace=True)
 
-#Unify the date
-EM_tweet["date"]=pd.to_datetime(EM_tweet['date'])
-Doge["date"]=pd.to_datetime(Doge['Date'])
-Doge=Doge.drop(columns=['Date'])
+EM_tweet_tf = create_tf_idf(EM_tweet['sw_dictionary'], 1, 1)
+EM_tweet_tf["Date"] = EM_tweet["Date"]
+EM_tweet_vc = create_vec(EM_tweet['sw_dictionary'], 1, 1)
+EM_tweet_vc["Date"] = EM_tweet["Date"]
+
+
 
 #merge original EM(clean text) with Doge price
-m1 = pd.merge(left=EM_tweet, right=Doge, on="date")
-write_pickle(output_pickle_path, "MEmDogeOriginal.pkl", m1)
-
+merge_and_csv(EM_tweet, Doge, "Date", output_pickle_path, "M_EMDoge", output_path)
 
 #merge tf_idf EM tweet with Doge price
-temp = create_tf_idf(EM_tweet['sw_dictionary'], 1, 1)
-temp["date"] = EM_tweet["date"]
-m2 = pd.merge(left=temp, right=Doge, on="date")
-write_pickle(output_pickle_path, "MEmDoge_tf_idf.pkl", m2)
+merge_and_csv(EM_tweet_tf, Doge, "Date", output_pickle_path, "M_EMDoge_tf", output_path)
 
 #merge vector count EM tweet with Doge price
-cur = create_vec(EM_tweet['sw_dictionary'], 1, 1)
-cur["date"] = EM_tweet["date"]
-m3 = pd.merge(left=cur, right=Doge, on="date")
-write_pickle(output_pickle_path, "MEmDoge_VC.pkl", m3)
+merge_and_csv(EM_tweet_vc, Doge, "Date", output_pickle_path, "M_EMDoge_vc", output_path)
+
+#merge original EM(clean text) with Bitcoin price
+merge_and_csv(EM_tweet, BitPrice, "Date", output_pickle_path, "M_EMBit", output_path)
+
+#merge tf_idf EM tweets with Bitcoin Price
+merge_and_csv(EM_tweet_tf, BitPrice, "Date", output_pickle_path, "M_EMBit_tf", output_path)
+
+#merge vc EM tweets with Bitcoin Price
+merge_and_csv(EM_tweet_vc, BitPrice, "Date", output_pickle_path, "M_EMBit_vc", output_path)
+
+#merge original Btweets with B Price
+merge_and_csv(BitTweets, BitPrice, "Date", output_pickle_path, "M_BtweetsPrice", output_path)
+
+#merge bit coin price and dogecoin price
+merge_and_csv(BitPrice, Doge, "Date", output_pickle_path, "M_BtweetsPrice_Doge", output_path)
+
+
+# BitTweets_tf = create_tf_idf(BitTweets['sw_dictionary'], 1, 1)
+# BitTweets_tf.insert(0, "Date", BitTweets["Date"])
+# BitTweets_vc = create_vec(BitTweets['sw_dictionary'], 1, 1)
+# BitTweets_vc["Date"] = BitTweets["Date"]
+
+#merge tf_idf Btweets with B Price
+# merge(BitTweets_tf, BitPrice, "Date", output_pickle_path, "M_BtweetsPrice_tf.pkl")
+
+# #merge vc Btweets with B Price
+# m2 = pd.merge(left=BitTweets_vc, right=BitPrice, on="Date")
+
