@@ -6,19 +6,29 @@ Created on Tue Jul 20 13:38:06 2021
 @author: jasonti
 """
 
-def score_dataframe(var):
-    import pandas as pd
-    sentence=""
-    score=[]
-    columns = list(var)
-    for i in var.index:
-        for j in columns:
-            if var[j][i]>0.0:
-                sentence+=str(j)
-        score.append(sentiment_scores(sentence))
-    var["sentiment_score"]=score
-    return
-        
+# sentiment score   
+def s_score(df,target,output):
+    """
+
+    Parameters
+    ----------
+    df : target dataframe.
+    target : A string: column name for text
+    output : A string: column name for sentiment score
+
+    Returns
+    -------
+    None.
+
+    """
+    s_score = []
+    for text in df[target]:
+        score = sentiment_scores(text)
+        s_score.append(score)
+    df[output] = s_score
+    print('complete')
+    
+    
 def sentiment_scores(sentence):
     from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
     # Create a SentimentIntensityAnalyzer object.
