@@ -12,8 +12,14 @@ import csv
 output_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/DataSets/Preprocessed/"
 output_pickle_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/Code/pickle/"
 
-BitTweets = open_pickle(output_pickle_path, "tweets.pkl")
+BitTweets = open_pickle(output_pickle_path, "Bittweet.pkl")
 
+
+BitTweets['date'] = pd.to_datetime(BitTweets['date'])
+BitTweets = BitTweets.drop(columns=['user_created', 'user_followers', 'user_friends', 'splitted_date', 'length'])
+BitTweets=BitTweets.resample('D', on='date').mean()
+
+BitTweets.to_csv(output_path+"/tweets_sentscore_day.csv")
 # df = pd.DataFrame()
 
 # df["text"]=BitTweets["text_sw"]
@@ -35,11 +41,13 @@ BitTweets = open_pickle(output_pickle_path, "tweets.pkl")
 
 # write_pickle(output_pickle_path, "score.pkl", score)
 
-var = open_pickle(output_pickle_path, "score.pkl")
-score=[]
-for i in var:
-    score.append(i["compound"])
+# var = open_pickle(output_pickle_path, "score.pkl")
+# score=[]
+# for i in var:
+#     score.append(i["compound"])
 
-BitTweets["sent_score"]=score
+# BitTweets["sent_score"]=score
 
-BitTweets.to_csv(output_path+"/tweets_sentscore.csv")
+
+# BitTweets.to_csv(output_path+"/tweets_sentscore.csv")
+
