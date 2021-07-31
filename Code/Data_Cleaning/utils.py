@@ -6,6 +6,14 @@ Created on Tue Jul 20 13:38:06 2021
 @author: jasonti
 """
 
+def fix_data(var_in):
+    from datetime import datetime
+    try:
+        return datetime.strptime(var_in, "%Y-%m-%d")
+    except:
+        return None
+    
+    
 def merge_and_csv(var1, var2, temp, path, name, out_path):
     import pandas as pd
     m = pd.merge(left=var1, right=var2, on=temp)
@@ -82,6 +90,6 @@ def seek_and_clean(path_in,filename, rowname, columnname):
 #Clean the text
 def clean_text(var_in):
     import re
-    tmp = re.sub("[^A-z]+", " ", var_in.lower())
+    tmp = re.sub("[^A-Za-z]+", " ", var_in.lower())
     return tmp
 

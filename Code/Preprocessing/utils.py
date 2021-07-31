@@ -6,6 +6,7 @@ Created on Tue Jul 20 13:38:06 2021
 @author: jasonti
 """
 
+
 # sentiment score   
 def s_score(df,target,output):
     """
@@ -21,12 +22,15 @@ def s_score(df,target,output):
     None.
 
     """
-    s_score = []
+    score = []
+    n=0
     for text in df[target]:
-        score = sentiment_scores(text)
-        s_score.append(score)
-    df[output] = s_score
-    print('complete')
+        n+=1
+        if n %1000 ==0:
+            print(n)
+        score.append(sentiment_scores(text)["compound"])
+    df[output] = score
+    
     
     
 def sentiment_scores(sentence):

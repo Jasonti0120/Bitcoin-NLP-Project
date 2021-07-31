@@ -15,15 +15,19 @@ price_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/DataSets/Original
 output_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/DataSets/Preprocessed/"
 output_pickle_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/Code/pickle/"
 
-EM_tweet = open_pickle(output_pickle_path, "EM_tweet.pkl")
-Doge = open_pickle(output_pickle_path, "doge.pkl")
-BitPrice = open_pickle(output_pickle_path, "Bprice.pkl")
+
 BitTweets = open_pickle(output_pickle_path, "BTweets.pkl")
 BitTweets.rename(columns={'date':'Date'},
 inplace=True)
+EM_tweet = open_pickle(output_pickle_path, "EM_tweet.pkl")
+Doge = open_pickle(output_pickle_path, "doge.pkl")
+BitPrice = open_pickle(output_pickle_path, "Bprice.pkl")
+
 
 EM_tweet_tf = create_tf_idf(EM_tweet['sw_dictionary'], 1, 1)
 EM_tweet_tf["Date"] = EM_tweet["Date"]
+
+
 EM_tweet_vc = create_vec(EM_tweet['sw_dictionary'], 1, 1)
 EM_tweet_vc["Date"] = EM_tweet["Date"]
 
@@ -56,8 +60,11 @@ merge_and_csv(BitPrice, Doge, "Date", output_pickle_path, "M_BtweetsPrice_Doge",
 
 # BitTweets_tf = create_tf_idf(BitTweets['sw_dictionary'], 1, 1)
 # BitTweets_tf.insert(0, "Date", BitTweets["Date"])
+# write_pickle(output_pickle_path, "BTweets_tf.pkl", BitTweets_tf)
+
 # BitTweets_vc = create_vec(BitTweets['sw_dictionary'], 1, 1)
 # BitTweets_vc["Date"] = BitTweets["Date"]
+# write_pickle(output_pickle_path, "BTweets_vc.pkl", BitTweets_vc)
 
 #merge tf_idf Btweets with B Price
 # merge(BitTweets_tf, BitPrice, "Date", output_pickle_path, "M_BtweetsPrice_tf.pkl")
