@@ -12,19 +12,29 @@ import csv
 output_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/DataSets/Preprocessed/"
 output_pickle_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/Code/pickle/"
 
-tweet = open_pickle(output_pickle_path, "tweets.pkl")
+tweet = open_pickle(output_pickle_path, "tweets_sentscore.pkl")
 
 
 df1=tweet.groupby(tweet['date'].dt.date)['sent_score'].mean().reset_index()
 
 
+df2= pd.DataFrame()
+df2["Volume"]=tweet.groupby(tweet['date'].dt.date).size()
+cur=[]
+for i in df2["Volume"]:
+    cur.append(i)
+df1["Vol"]=cur
+
+dt2 = pd.to_datetime("2019-05-30")
+
+df1=df1[(df1['date'] < dt2)].reset_index()
 # s_score(tweet,"dict", "sent_score")
 
 
 
 
 
-write_pickle(output_pickle_path, "tweets_sentscore.pkl", tweet)
+# write_pickle(output_pickle_path, "tweets_sentscore.pkl", tweet)
 # BitTweets['date'] = pd.to_datetime(BitTweets['date'])
 
 # BitTweets["sw_dict"]=BitTweets["text_sw"].apply(dictionary_check)
@@ -58,4 +68,4 @@ write_pickle(output_pickle_path, "tweets_sentscore.pkl", tweet)
 
 # BitTweets.to_csv(output_path+"/tweets_swd.csv")
 
-# df1.to_csv(output_path+"/tweets_score.csv")
+df1.to_csv(output_path+"/tweets_score.csv")
