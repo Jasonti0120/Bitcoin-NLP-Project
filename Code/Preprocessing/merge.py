@@ -17,7 +17,7 @@ output_pickle_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/Code/pick
 df_price = pd.read_csv(output_path + "bit_price.csv")
 
 df_price = df_price.drop(columns=['Unnamed: 0'])
-df_price["date"]=pd.to_datetime(df_price["date"])
+df_price["date"]=pd.to_datetime(df_price["date"]).dt.date
 
 
 df_price["DateIndex"]=df_price["date"]
@@ -27,12 +27,11 @@ df_tweet = pd.read_csv(output_path + "tweets_score.csv")
 
 df_m = pd.DataFrame()
 
-df_m["date"]=pd.to_datetime(df_tweet["date"])
+df_m["date"]=pd.to_datetime(df_tweet["date"]).dt.date
 
 df_m["sent_score"]=df_tweet["sent_score"]
 
 df_m["Vol"]=df_tweet["Vol"]
-
 
 df_m["DateIndex"]=df_m["date"]
 df_m = df_m.set_index('DateIndex')
@@ -65,5 +64,5 @@ for i in df_m.date:
 
 
 df_m = df_m.drop(columns=['date'])
-write_pickle(output_pickle_path, "merge1.pkl", df_m)
-df_m.to_csv(output_path+"/merge1.csv")
+write_pickle(output_pickle_path, "merge2.pkl", df_m)
+df_m.to_csv(output_path+"/merge2.csv")
