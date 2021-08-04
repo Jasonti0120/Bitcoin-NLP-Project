@@ -6,6 +6,27 @@ Created on Sun Aug  1 12:55:14 2021
 @author: jasonti
 """
 
+def model_score(model_list, x_in, y_in):
+    from sklearn.model_selection import cross_val_score, cross_validate, KFold
+    from sklearn.metrics import recall_score
+    from sklearn.ensemble import VotingClassifier
+    import numpy as np
+    models = []
+    scores = {}
+    # create the sub models
+    estimators = []
+    for model in model_list:
+        cv_model = cross_validate(model, x_in, y_in, n_jobs=-1, cv=5, 
+                            scoring='accuracy')
+        models.append((str(model), model))
+        scores[str(model)] = {np.mean(cv_model['test_score'])}
+    ensemble = VotingClassifier(estimators=models)
+    ensemble_model = cross_validate(ensemble, x_in, y_in, n_jobs=-1, cv=5, 
+                            scoring='accuracy')
+    scores["ensemble"] = {np.mean(ensemble_model['test_score'])}
+    return scores
+    
+
 
 
 #Random Forest
@@ -43,13 +64,6 @@ def split_data(x_in, y_in, split_fraction):
         x_in, y_in, test_size=split_fraction, random_state=42)
     return X_train_t, X_test_t, y_train_t, y_test_t
 
-
-def split_data(x_in, y_in, split_fraction):
-    #training test split
-    from sklearn.model_selection import train_test_split
-    X_train_t, X_test_t, y_train_t, y_test_t = train_test_split(
-        x_in, y_in, test_size=split_fraction, random_state=42)
-    return X_train_t, X_test_t, y_train_t, y_test_t
 
 
 def stem_fun(var):

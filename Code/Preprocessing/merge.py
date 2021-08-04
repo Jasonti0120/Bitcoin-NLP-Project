@@ -36,17 +36,25 @@ df_m["Vol"]=df_tweet["Vol"]
 df_m["DateIndex"]=df_m["date"]
 df_m = df_m.set_index('DateIndex')
 
-# df_m["t-1"]=""
-# df_m["t-2"]=""
-# df_m["t-3"]=""
-# df_m["t-4"]=""
-# df_m["t-5"]=""
-# df_m["t-6"]=""
+df_m["t-1"]=""
+df_m["t-2"]=""
+df_m["t-3"]=""
+df_m["t-4"]=""
+df_m["t-5"]=""
+df_m["t-6"]=""
 df_m["label"]=""
+
 
 for i in df_m.date:
     cur = i+timedelta(days=1)
     for j in df_price.date:
+        if i == j:
+            df_m["t-1"][i]=df_price.loc[j, "t-1"]
+            df_m["t-2"][i]=df_price.loc[j, "t-2"]
+            df_m["t-3"][i]=df_price.loc[j, "t-3"]
+            df_m["t-4"][i]=df_price.loc[j, "t-4"]
+            df_m["t-5"][i]=df_price.loc[j, "t-5"]
+            df_m["t-6"][i]=df_price.loc[j, "t-6"]
         if cur == j:
             temp = df_price.loc[j, "t-1"]
             if temp > 0:
@@ -55,14 +63,10 @@ for i in df_m.date:
                 df_m["label"][i] = 0
             if temp < 0:
                 df_m["label"][i] = -1
-            # df_m["t-1"][i]=df_price.loc[j, "t-1"]
-            # df_m["t-2"][i]=df_price.loc[j, "t-2"]
-            # df_m["t-3"][i]=df_price.loc[j, "t-3"]
-            # df_m["t-4"][i]=df_price.loc[j, "t-4"]
-            # df_m["t-5"][i]=df_price.loc[j, "t-5"]
-            # df_m["t-6"][i]=df_price.loc[j, "t-6"]
+    
+            
 
 
 df_m = df_m.drop(columns=['date'])
-write_pickle(output_pickle_path, "merge2.pkl", df_m)
-df_m.to_csv(output_path+"/merge2.csv")
+write_pickle(output_pickle_path, "merge3.pkl", df_m)
+df_m.to_csv(output_path+"/merge3.csv")
