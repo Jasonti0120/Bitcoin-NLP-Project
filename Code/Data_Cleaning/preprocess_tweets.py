@@ -14,7 +14,8 @@ tweet_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/DataSets/Original
 output_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/DataSets/Preprocessed/"
 output_pickle_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/Code/pickle/"
 
-tweet = open_pickle(output_pickle_path, "tweets.pkl")
+tweet = open_pickle(output_pickle_path, "tweets_sentscore.pkl")
+
 
 
 # tweet["dict"]=tweet["re_sw"].apply(dictionary_check)
@@ -34,7 +35,7 @@ tweet = open_pickle(output_pickle_path, "tweets.pkl")
 # tweet["date"] = tweet['timestamp'].apply(
 #     lambda x: str(x)[0:10]).apply(fix_data)
 
-# dt = pd.to_datetime("2019-01-01")
+# dt = pd.to_datetime("2019-01-01")tweet.
 
 # tweet=tweet[(tweet['date'] >= dt)].reset_index()
 

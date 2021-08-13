@@ -11,7 +11,11 @@ import pandas as pd
 import numpy as np
 from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
-from sklearn import svm
+from sklearn.dummy import DummyClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC, LinearSVC
+from sklearn.tree import DecisionTreeClassifier, plot_tree
 
 #Replace both paths with the one on your machine 
 price_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/DataSets/Original/price/"
@@ -19,24 +23,30 @@ output_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/DataSets/Preproc
 output_pickle_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/Code/pickle/"
 output_pickle_score_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/Code/pickle/scores/"
 
-clf = svm.SVC()
-rf = RandomForestClassifier()
+dummy = DummyClassifier()
+svc = SVC()
 gnb = GaussianNB()
+rf = RandomForestClassifier(random_state=123)
+dt = DecisionTreeClassifier()
+lr = LogisticRegression()
+knn = KNeighborsClassifier()
 
-df = open_pickle(output_pickle_path, "merge_z_sent.pkl")
+
+df = open_pickle(output_pickle_path, "merge_15_vol5.pkl")
 
 labels = np.array(df.label.astype('int'))
 features= df.drop('label', axis = 1)
 features = np.array(features)
 
-scores = model_score([clf, rf, gnb], features, labels)
+result3 = model_score([svc, gnb, lr], features, labels)
 
+result5 = model_score([svc, gnb, rf, lr, knn], features, labels)
 
+result7 = model_score([dummy, svc, gnb, rf, dt, lr, knn], features, labels)
 
-# print(results.mean())
-
-
-# write_pickle(output_pickle_score_path, "zscore_sentVol.pkl", scores)
+# write_pickle(output_pickle_score_path, "zscore_3models_sr.pkl", result3)
+# write_pickle(output_pickle_score_path, "zscore_5models_sr.pkl", result5)
+# write_pickle(output_pickle_score_path, "zscore_7models_sr.pkl", result7)
 
 
 

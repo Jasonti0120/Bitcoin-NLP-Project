@@ -11,23 +11,44 @@ def model_score(model_list, x_in, y_in):
     from sklearn.metrics import recall_score
     from sklearn.ensemble import VotingClassifier
     import numpy as np
+    import pandas as pd
     models = []
-    scores = {}
+    summary = pd.DataFrame()
     # create the sub models
     estimators = []
+    model_name=[]
+    accuracy=[]
+    precision=[]
+    recall=[]
+    f1=[]
     for model in model_list:
-        cv_model = cross_validate(model, x_in, y_in, n_jobs=-1, cv=5, 
-                            scoring='accuracy')
+        cv_model = cross_validate(model, x_in, y_in, n_jobs=-1, cv=5, return_train_score=True, 
+                                  scoring=['accuracy','recall','precision','f1'])
         models.append((str(model), model))
-        scores[str(model)] = {np.mean(cv_model['test_score'])}
-    ensemble = VotingClassifier(estimators=models)
-    ensemble_model = cross_validate(ensemble, x_in, y_in, n_jobs=-1, cv=5, 
-                            scoring='accuracy')
-    scores["ensemble"] = {np.mean(ensemble_model['test_score'])}
-    return scores
+        model_name.append(model.__class__.__name__)
+        accuracy.append(np.mean(cv_model['test_accuracy']))
+        precision.append(np.mean(cv_model['test_precision']))
+        recall.append(np.mean(cv_model['test_recall']))
+        f1.append(np.mean(cv_model['test_f1']))
     
+    ensemble = VotingClassifier(estimators=models)
+    ensemble_model = cross_validate(ensemble, x_in, y_in, n_jobs=-1, cv=5, return_train_score=True, 
+                                  scoring=['accuracy','recall','precision','f1'])
+    
+    model_name.append('Ensemble')
+    accuracy.append(np.mean(ensemble_model['test_accuracy']))
+    precision.append(np.mean(ensemble_model['test_precision']))
+    recall.append(np.mean(ensemble_model['test_recall']))
+    f1.append(np.mean(ensemble_model['test_f1']))  
+    
+    summary['model'] = model_name
+    summary['test accuracy'] = accuracy
+    summary['test precision'] = precision
+    summary['test recall'] = recall
+    summary['test f1'] = f1
 
-
+    return summary
+    
 
 #Random Forest
 def my_rf(x_in, y_in, out_in):

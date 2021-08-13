@@ -14,9 +14,9 @@ price_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/DataSets/Original
 output_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/DataSets/Preprocessed/"
 output_pickle_path = "/Users/jasonti/Desktop/Bitcoin-NLP-Project-Local/Code/pickle/"
 
-df_price = pd.read_csv(output_path + "bit_price.csv")
+df_price = open_pickle(output_pickle_path, "price_preprocessed_sr3.pkl")
 
-df_price = df_price.drop(columns=['Unnamed: 0'])
+# df_price = df_price.drop(columns=['Unnamed: 0'])
 df_price["date"]=pd.to_datetime(df_price["date"]).dt.date
 
 
@@ -67,6 +67,4 @@ for i in df_m.date:
             
 
 
-df_m = df_m.drop(columns=['date'])
-write_pickle(output_pickle_path, "merge3.pkl", df_m)
-df_m.to_csv(output_path+"/merge3.csv")
+write_pickle(output_pickle_path, "merge8.pkl", df_m)
